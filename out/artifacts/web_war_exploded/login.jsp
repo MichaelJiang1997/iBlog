@@ -13,8 +13,8 @@
 <body>
 <h1>iBlog-Login</h1>
 <form action="loginAction.jsp" method="post" >
-    <input type="text" placeholder="username" name="username" />
-    <input type="text" placeholder="password" name="password" />
+    <input type="text" placeholder="username" name="u_name" />
+    <input type="password" placeholder="password" name="u_psw" />
     <button>登录</button>
 </form>
 </body>

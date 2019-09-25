@@ -13,11 +13,13 @@
 </head>
 <body>
 <%
-    Connection conn = DBUtils.getConnection();
-    conn.close();
-    if(session.getAttribute("username") == null){
+
+    if(session.getAttribute("u_name") == null){
         response.sendRedirect("login.jsp");
+    }else{
+        out.write((String)session.getAttribute("u_last_login"));
     }
+
 
 %>
 </body>
