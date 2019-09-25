@@ -1,28 +1,23 @@
 package Bean;
-
-/**
- *  id  int auto_increment primary key ,
- *     u_name   varchar(50),
- *     u_psw   varchar(20),
- *     u_ico    varchar(50),
- *     u_motto  varchar(50),
- *     u_blog_name   varchar(100),
- *     u_last_login    datetime,
- *     u_follow_num     int
+/*
+    id  int not null ,
+    user_name   varchar(50),
+    user_pswd   varchar(20),
+    user_ico    varchar(50),
+    user_motto  varchar(50),
+    user_blogName   varchar(100),
+    user_ctTime     date,
+    user_hitNum     int
  */
-public class User {
 
+
+public class User{
     private int id;
-
-    public User(){
-
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
+    private String u_name;
+    private String u_psw;
+    private String u_ico;
+    private String u_motto;
+    public String u_blog_name;
+    private String u_last_login;
+    private int u_follow_num;
 }
