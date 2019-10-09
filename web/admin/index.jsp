@@ -12,12 +12,23 @@
     <title>iBlog-admin</title>
 </head>
 <body>
+
+<%--JavaBean--%>
+<jsp:useBean id="user" class="Bean.User" ></jsp:useBean>
+
 <%
 
     if(session.getAttribute("u_name") == null){
         response.sendRedirect("login.jsp");
     }else{
         out.write((String)session.getAttribute("u_last_login"));
+        out.write("<br/>");
+        out.write((String)session.getAttribute("u_name"));
+        out.write("<br/>");
+        out.write((String)session.getAttribute("u_psw"));
+        out.write("<br/><a href='editor.jsp'>写文章</a>");
+
+
     }
 
 

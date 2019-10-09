@@ -8,8 +8,8 @@
   <body>
   <%@ include file="comm/header.jsp"%>
   iBlog 主界面,<%= session.getAttribute("u_name") == null?"还没登录?":"欢迎回来"+session.getAttribute("u_name")%>
-  <a href="admin.jsp">后台管理</a>
-  <a href="logout.jsp">登出</a>
+  <a href="admin/index.jsp">后台管理</a>
+  <a href="admin/logout.jsp">登出</a>
   <%@ include file="comm/footer.jsp"%>
   </body>
 </html>
