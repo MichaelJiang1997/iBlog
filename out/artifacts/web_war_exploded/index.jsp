@@ -174,7 +174,7 @@
     <!-- 网站底部 -->
         <%@ include file="comm/footer.jsp"%>
 </div>
-
+    <!-- 包含脚本-->
     <%@ include file="comm/script.jsp"%>
 </body>
 </html>

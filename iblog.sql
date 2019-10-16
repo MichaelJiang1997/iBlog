@@ -59,25 +59,13 @@ create table tb_photo(
 
 
 # 创建留言表
-create table tb_word(
-    id  int not null,
-    word_whoId  int,
-    word_content    varchar (2000),
-    word_author     varchar (50),
-    word_time       date ,
-    primary key(id)
-
-);
-
-
-# 创建留言表
-create table tb_articleRB(
-    id  int not null ,
-    artReview_rootId    int,
-    artReview_author    int,
-    artReview_content   varchar (2000),
-    artReview_time      date ,
-    primary key (id)
+create table tb_contact(
+    id  int primary key auto_increment,
+    contact_name        varchar (32) not null ,
+    contact_title       varchar (32) not null,
+    contact_email       varchar (64) not null,
+    contact_content     varchar (1024) not null,
+    contact_time        datetime
 );
 
 

@@ -46,26 +46,28 @@
                     </div>
                 </div>
                 <div class="list-group" id="site-link-list">
-                    <a class="list-group-item" target="_blank" href="javascript:if(confirm('点击确定将跳转'))window.location='http://www.ybsat.com/'">
+                    <a class="list-group-item" target="_blank"
+                       href="javascript:if(confirm('点击确定将跳转'))window.location='http://www.sencom.top/'">
                         <h4 class="list-group-item-heading">
                             <i class="fa fa-link">
                             </i>
-                            异步
+                            Michael's Blog
                         </h4>
                         <p class="list-group-item-text">
-                            异步
+                            专业Coder
                         </p>
                     </a>
                 </div>
                 <div class="list-group" id="site-link-list">
-                    <a class="list-group-item" target="_blank" href="javascript:if(confirm('点击确定将跳转'))window.location='http://www.ybsat.com/'">
+                    <a class="list-group-item" target="_blank"
+                       href="javascript:if(confirm('点击确定将跳转'))window.location='http://blog.zhazhafang.cn/'">
                         <h4 class="list-group-item-heading">
                             <i class="fa fa-link">
                             </i>
-                            异步
+                            渣渣方
                         </h4>
                         <p class="list-group-item-text">
-                            异步
+                            一个懒癌+妄想症的处女座程序员
                         </p>
                     </a>
                 </div>

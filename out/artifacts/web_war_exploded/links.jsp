@@ -46,26 +46,28 @@
                     </div>
                 </div>
                 <div class="list-group" id="site-link-list">
-                    <a class="list-group-item" target="_blank" href="javascript:if(confirm('点击确定将跳转'))window.location='http://www.ybsat.com/'">
+                    <a class="list-group-item" target="_blank"
+                       href="javascript:if(confirm('点击确定将跳转'))window.location='http://www.sencom.top/'">
                         <h4 class="list-group-item-heading">
                             <i class="fa fa-link">
                             </i>
-                            异步
+                            Michael's Blog
                         </h4>
                         <p class="list-group-item-text">
-                            异步
+                            专业Coder
                         </p>
                     </a>
                 </div>
                 <div class="list-group" id="site-link-list">
-                    <a class="list-group-item" target="_blank" href="javascript:if(confirm('点击确定将跳转'))window.location='http://www.ybsat.com/'">
+                    <a class="list-group-item" target="_blank"
+                       href="javascript:if(confirm('点击确定将跳转'))window.location='http://blog.zhazhafang.cn/'">
                         <h4 class="list-group-item-heading">
                             <i class="fa fa-link">
                             </i>
-                            异步
+                            渣渣方
                         </h4>
                         <p class="list-group-item-text">
-                            异步
+                            一个懒癌+妄想症的处女座程序员
                         </p>
                     </a>
                 </div>
@@ -117,29 +119,8 @@
     <!-- 网站底部 -->
     <%@ include file="comm/footer.jsp"%>
 </div>
-<script src="js/bootstrap.min.js"></script>
-<script>
-        /*banner 初始化*/
-        $(window).load(function() {
-         $('#slider').nivoSlider({
-            effect: 'random',        // 过渡效果
-            controlNav: false,       // 是否显示图片导航控制按钮（,2,3... ）
-            pauseOnHover: true,      // 鼠标县浮时是否停止动画
-            manualAdvance: false,    // 是否手动切换 
-            animSpeed: 100,          // 图片过渡时间   
-            pauseTime: 2000,         // 图片显示时间
-            pauseOnHover: false,
-            manualAdvance: false,
-        });
-        });
-    $(document).ready(function(){
-        $('body').show();
-        $('.version').text(NProgress.version);
-        NProgress.start();
-        setTimeout(function() { NProgress.done(); $('.fade').removeClass('out'); }, 1000);
-    })
-    
-</script>
+<!-- 包含脚本-->
+<%@ include file="comm/script.jsp"%>
 </body>
 
 </html>

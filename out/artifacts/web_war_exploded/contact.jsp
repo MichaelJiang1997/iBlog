@@ -1,4 +1,10 @@
-<%-- Created by IntelliJ IDEA. --%>
+<%@ page import="utils.DBUtils" %>
+<%@ page import="java.sql.Connection" %>
+<%@ page import="java.sql.Statement" %>
+<%@ page import="java.sql.ResultSet" %>
+<%@ page import="Bean.Contact" %>
+<%@ page import="java.util.List" %>
+<%@ page import="java.util.LinkedList" %><%-- Created by IntelliJ IDEA. --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <!DOCTYPE html>
@@ -60,33 +66,29 @@
                     已经介绍的比较详细了，如果你想联系我的话，不妨写信给我。
                 </p>
                 <p>
-                    <a class="btn btn-sm btn-primary" href="mailto:7248478999@qq.com" target="_blank">
+                    <a class="btn btn-sm btn-primary" href="mailto:sencom1997@outlook.com" target="_blank">
                         <i class="fa fa-qq">
                         </i>
                         QQ邮箱
                     </a>
-                    <a class="btn btn-sm btn-primary" href="mailto:junqianhen@gmail.com" target="_blank">
+                    <a class="btn btn-sm btn-primary" href="mailto:sencom1997@outlook.com" target="_blank">
                         <i class="fa fa-google">
                         </i>
                         Gmail邮箱
                     </a>
                 </p>
                 <p>
-                    当然，如果你有新浪微博或者腾讯微博的话，也可以在上面给我留言。
+                    当然，你也可以去我的代码仓库逛一逛
                 </p>
                 <p>
-                    <a class="btn btn-sm btn-primary" href="javascript:if(confirm('http://weibo.ybsat.com/  \n\n'))window.location='http://www.ybsat.com/'"
+                    <a class="btn btn-sm btn-primary"
+                       href="javascript:if(confirm('https://github.com/MichaelJiang1997  \n\n'))window.location='https://github.com/MichaelJiang1997'"
                        target="_blank">
                         <i class="fa fa-weibo">
                         </i>
-                        新浪微博
+                        GitHub
                     </a>
-                    <a class="btn btn-sm btn-primary" href="javascript:if(confirm('http://www.ybsat.com/  \n\n'))window.location='http://www.ybsat.com/'"
-                       target="_blank">
-                        <i class="fa fa-tencent-weibo">
-                        </i>
-                        腾讯微博
-                    </a>
+
                 </p>
                 <p>
                     或者，直接在本页留言也可以，不过不确定什么时候会看到
@@ -96,7 +98,27 @@
             </div>
         </div>
     </div>
-    <div class="row">
+
+    <%
+        // 从数据库读取最新的十六条留言显示出来
+
+        //首先准备一个容器来张数据
+        List<Contact> list = new LinkedList<>();
+
+        Connection conn = DBUtils.getConnection();
+        String sql = "select * from tb_contact order by contact_time desc limit 16";
+        Statement sm = conn.createStatement();
+        ResultSet res = sm.executeQuery(sql);
+        while (res.next()){
+            list.add(new Contact(res.getString("contact_name"),
+                    res.getString("contact_title"),res.getString("contact_email"),
+                    res.getString("contact_content"),res.getString("contact_time")));
+
+        }
+
+        for(Contact c: list){
+    %>
+        <div class="row">
         <div class="col-md-12 post-container">
             <div class="post-content">
                 <div class="ds-thread" data-thread-key="750" data-author-key="1" data-title="给我留言"
@@ -111,51 +133,23 @@
                       <span class="fn">
                         <a href=""
                            rel='external nofollow' class='url'>
-                            异步
+                            <%=c.getContact_name()%>
                         </a>
                       </span>
                                         on
                                         <a rel="nofollow" href="">
                                             <time pubdate datetime="2015-01-06T00:15:56+00:00">
-                                                2015 年 1 月 6 日 at am 12:15
+                                                <%=c.getContact_time()%>
                                             </time>
                                         </a>
-                      <span class="says">
+                                        <span class="says">
                         said:
                       </span>
                                     </cite>
                                 </footer>
                                 <div class="comment-content">
                                     <p>
-                                        嗨~
-                                    </p>
-                                </div>
-                            </article>
-                        </li>
-                        <li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-11323">
-                            <article id="comment-11323" class="comment">
-                                <footer class="comment-meta">
-                                    <cite class="comment-author vcard">
-                      <span class="fn">
-                        <a href=""
-                           rel='external nofollow' class='url'>
-                            异步
-                        </a>
-                      </span>
-                                        on
-                                        <a rel="nofollow" href="">
-                                            <time pubdate datetime="2015-01-05T17:12:39+00:00">
-                                                2015 年 1 月 5 日 at pm 5:12
-                                            </time>
-                                        </a>
-                      <span class="says">
-                        said:
-                      </span>
-                                    </cite>
-                                </footer>
-                                <div class="comment-content">
-                                    <p>
-                                        新年快乐~
+                                        <%=c.getContact_content()%>
                                     </p>
                                 </div>
                             </article>
@@ -165,10 +159,15 @@
             </div>
         </div>
     </div>
+    <%
+        }
+    %>
+
+
     <div class="row">
         <div class="col-md-12 post-container">
             <div class="post-content">
-                <form method="post" action="black/lib/contact.php" id="form1" class="contact-form">
+                <form action="ContactServlet" method="post"  class="contact-form">
                     <div>
           <span>
             <label>
@@ -206,13 +205,13 @@
             </label>
           </span>
           <span>
-            <textarea name="contact_con" class="textbox">
+            <textarea name="contact_content" class="textbox">
             </textarea>
           </span>
                     </div>
                     <div>
           <span>
-            <input type="submit" value="提交" name="tijiao">
+            <input type="submit" value="提交" name="submit">
           </span>
                     </div>
                 </form>
@@ -225,29 +224,8 @@
     <!-- 网站底部 -->
     <%@ include file="comm/footer.jsp"%>
 </div>
-<script src="js/bootstrap.min.js"></script>
-<script>
-        /*banner 初始化*/
-        $(window).load(function() {
-         $('#slider').nivoSlider({
-            effect: 'random',        // 过渡效果
-            controlNav: false,       // 是否显示图片导航控制按钮（,2,3... ）
-            pauseOnHover: true,      // 鼠标县浮时是否停止动画
-            manualAdvance: false,    // 是否手动切换 
-            animSpeed: 100,          // 图片过渡时间   
-            pauseTime: 2000,         // 图片显示时间
-            pauseOnHover: false,
-            manualAdvance: false,
-        });
-        });
-    $(document).ready(function(){
-        $('body').show();
-        $('.version').text(NProgress.version);
-        NProgress.start();
-        setTimeout(function() { NProgress.done(); $('.fade').removeClass('out'); }, 1000);
-    })
-    
-</script>
+<!-- 包含脚本-->
+<%@ include file="comm/script.jsp"%>
 </body>
 
 </html>
