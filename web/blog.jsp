@@ -1,5 +1,21 @@
-<%-- Created by IntelliJ IDEA. --%>
+<%@ page import="java.sql.Connection" %>
+<%@ page import="utils.DBUtils" %>
+<%@ page import="java.sql.Statement" %>
+<%@ page import="java.sql.ResultSet" %>
+<%@ page import="java.util.List" %>
+<%@ page import="Bean.Article" %>
+<%@ page import="java.util.LinkedList" %><%-- Created by IntelliJ IDEA. --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
+<%
+    // 拿get参数作为分页啊
+    String pages = request.getParameter("pages");
+
+    // 判断一下pages个是么得,若么得就赋为默认值 1
+    if(pages == null){
+        pages = "1";
+    }
+%>
 
 <!DOCTYPE html>
 <html lang="cn" dir="ltr" class="no-js">
@@ -14,37 +30,93 @@
 <%@ include file="comm/banner.jsp"%>
 
 <div class="container-fluid main-container" id="main-container">
+
+
     <div class="row">
         <div class="col-md-12 top-title">
-            <h2 class="page-title">
-                博客文章
-            </h2>
+            <h1 >
+                <div class="row">
+                    博客文章
+                <div class="input-group ">
+                    <input type="text" class="form-control" placeholder="Search for...">
+                    <span class="input-group-btn">
+                        <button class="btn btn-success" type="button">Go!</button>
+                    </span>
+                </div>
+            </div>
+            </h1>
         </div>
     </div>
+    <%
+        List<Article> aList = new LinkedList<>();
+
+        // 建立数据库连接
+        Connection conn = DBUtils.getConnection();
+        Statement sm = conn.createStatement();
+
+        // 统计文章总数做分页
+        int totalPage = 0;
+        String sqlCont = "select count(*) as cnt from tb_article";
+        ResultSet conRes = sm.executeQuery(sqlCont);
+        while (conRes.next()){
+            totalPage = conRes.getInt("cnt");
+        }
+
+        // 数据库拿文章
+        int p = Integer.parseInt(pages);
+        String sql = "select * from tb_article order by art_time desc limit "+(p-1)*3+",3";
+        ResultSet res = sm.executeQuery(sql);
+        while (res.next()){
+            aList.add(new Article(res.getString("art_id"),res.getString("art_title"),
+                    res.getString("art_class"),res.getString("art_tag"),res.getString("art_content"),
+                    res.getString("art_time"),res.getString("art_count"),res.getString("art_visible")));
+        }
+
+        // 拿标签和归类名哎
+        for(Article a: aList){
+            String sqlClass = "select class_name from tb_art_class where class_id="+a.getArt_class();
+            ResultSet classRes = sm.executeQuery(sqlClass);
+            String className="";
+            while(classRes.next()) {
+                className = classRes.getString("class_name");
+            }
+            a.setArt_class(className);
+
+            String sqlTag = "select tag_name from tb_art_tag where tag_id="+a.getArt_tag();
+            ResultSet tagRes = sm.executeQuery(sqlTag);
+            String tagName="";
+            while(tagRes.next()) {
+                tagName = tagRes.getString("tag_name");
+            }
+            a.setArt_tag(tagName);
+        }
+
+
+        DBUtils.closeAll(conn);
+    %>
+
+    <%
+        for(Article a : aList){
+
+    %>
     <div class="row">
         <div class="col-md-12 post-container">
             <h2 class="post-title">
-                <a href="content.jsp" title="">异步测试文章</a>
+                <a href="content.jsp?aid=<%=a.getArt_id() %>" title=""><%=a.getArt_title()%></a>
             </h2>
             <div class="meta-box">
             <span class="m-post-date">
               <i class="fa fa-calendar-o">
               </i>
-              2015年6月3日
+              <%=a.getArt_time()%>
             </span>
-            <span class="comments-link">
-              <a href="" class="ds-thread-count" data-thread-key="9500" title="Comment on 毕业两周年">
-                  <i class="fa fa-comments-o">
-                  </i>
-                  留言
-              </a>
-            </span>
+
             </div>
             <div class="post-content">
                 <p>
-                    leaves由异步制作,欢迎大家使用
+                    <%=a.getArt_content().substring(0,10)%>
                     <a href="">
-                        这是一个连接
+
                     </a>
                 </p>
             </div>
@@ -56,7 +128,7 @@
                   分类:
               </b>
               <a href="topics/life/diary.htm">
-                  测试
+                  <%=a.getArt_class()%>
               </a>
             </span>
             <span class="tag-links">
@@ -66,239 +138,79 @@
                   标签:
               </b>
               <a href="tags/毕业.htm" rel="tag">
-                  异步
+                  <%=a.getArt_tag()%>
               </a>
             </span>
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-12 post-container">
-            <h2 class="post-title">
-                异步测试文章
-            </h2>
-            <div class="meta-box">
-            <span class="m-post-date">
-              <i class="fa fa-calendar-o">
-              </i>
-              2015年6月3日
-            </span>
-            <span class="comments-link">
-              <a href="" class="ds-thread-count" data-thread-key="9500" title="Comment on 毕业两周年">
-                  <i class="fa fa-comments-o">
-                  </i>
-                  留言
-              </a>
-            </span>
-            </div>
-            <div class="post-content">
-                <p>
-                    leaves由异步制作,欢迎大家使用
-                    <a href="">
-                        这是一个连接
-                    </a>
-                </p>
-            </div>
-            <div class="meta-box">
-            <span class="cat-links">
-              <i class="fa fa-navicon">
-              </i>
-              <b>
-                  分类:
-              </b>
-              <a href="">
-                  测试
-              </a>
-            </span>
-            <span class="tag-links">
-              <i class="fa fa-tags">
-              </i>
-              <b>
-                  标签:
-              </b>
-              <a href="" rel="tag">
-                  异步
-              </a>
-            </span>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12 post-container">
-            <h2 class="post-title">
-                <a href="content.jsp" title="">异步测试文章</a>
-            </h2>
-            <div class="meta-box">
-            <span class="m-post-date">
-              <i class="fa fa-calendar-o">
-              </i>
-              2015年6月3日
-            </span>
-            <span class="comments-link">
-              <a href="" class="ds-thread-count" data-thread-key="9500" title="Comment on 毕业两周年">
-                  <i class="fa fa-comments-o">
-                  </i>
-                  留言
-              </a>
-            </span>
-            </div>
-            <div class="post-content">
-                <p>
-                    leaves由异步制作,欢迎大家使用
-                    <a href="http://www.ybsat.com">
-                        这是一个链接
-                    </a>
-                </p>
-            </div>
-            <div class="meta-box">
-            <span class="cat-links">
-              <i class="fa fa-navicon">
-              </i>
-              <b>
-                  分类:
-              </b>
-              <a href="">
-                  测试
-              </a>
-            </span>
-            <span class="tag-links">
-              <i class="fa fa-tags">
-              </i>
-              <b>
-                  标签:
-              </b>
-              <a href="" rel="tag">
-                  异步
-              </a>
-            </span>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12 post-container">
-            <h2 class="post-title">
-                <a href="content.jsp" title="">异步测试文章</a>
-            </h2>
-            <div class="meta-box">
-            <span class="m-post-date">
-              <i class="fa fa-calendar-o">
-              </i>
-              2015年6月3日
-            </span>
-            <span class="comments-link">
-              <a href="" class="ds-thread-count" data-thread-key="9500" title="Comment on 毕业两周年">
-                  <i class="fa fa-comments-o">
-                  </i>
-                  留言
-              </a>
-            </span>
-            </div>
-            <div class="post-content">
-                <p>
-                    leaves由异步制作,欢迎大家使用
-                    <a href="http://www.ybsat.com">
-                        这是一个链接
-                    </a>
-                </p>
-            </div>
-            <div class="meta-box">
-            <span class="cat-links">
-              <i class="fa fa-navicon">
-              </i>
-              <b>
-                  分类:
-              </b>
-              <a href="">
-                  测试
-              </a>
-            </span>
-            <span class="tag-links">
-              <i class="fa fa-tags">
-              </i>
-              <b>
-                  标签:
-              </b>
-              <a href="" rel="tag">
-                  异步
-              </a>
-            </span>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12 post-container">
-            <h2 class="post-title">
-                <a href="content.jsp" title="">异步测试文章</a>
-            </h2>
-            <div class="meta-box">
-            <span class="m-post-date">
-              <i class="fa fa-calendar-o">
-              </i>
-              2015年6月3日
-            </span>
-            <span class="comments-link">
-              <a href="" class="ds-thread-count" data-thread-key="9500" title="Comment on 毕业两周年">
-                  <i class="fa fa-comments-o">
-                  </i>
-                  留言
-              </a>
-            </span>
-            </div>
-            <div class="post-content">
-                <p>
-                    leaves由异步制作,欢迎大家使用
-                    <a href="http://www.ybsat.com">
-                        这是一个链接
-                    </a>
-                </p>
-            </div>
-            <div class="meta-box">
-            <span class="cat-links">
-              <i class="fa fa-navicon">
-              </i>
-              <b>
-                  分类:
-              </b>
-              <a href="">
-                  测试
-              </a>
-            </span>
-            <span class="tag-links">
-              <i class="fa fa-tags">
-              </i>
-              <b>
-                  标签:
-              </b>
-              <a href="" rel="tag">
-                  异步
-              </a>
-            </span>
-            </div>
-        </div>
-    </div>
-    <!--分页进入第二页，一页多少可分配-->
+    <%
+        }
+    %>
+
+    <%
+        for (int i = 0; i < totalPage / 3; i++){
+    %>
+    <!--分页-->
     <div class="row post-pagination">
-        <div class="col-md-12">
-            <p>
-                <a href="" class="btn btn-primary btn-sm">
-              <span class="glyphicon glyphicon-refresh">
-              </span>
-              <span>
-                浏览之前的文章
-              </span>
-                </a>
-            </p>
+        <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+            <div class="btn-group" role="group" aria-label="First group">
+                <%
+                    if(Integer.parseInt(pages) == 1){// 是第一页则不能往前面翻了
+
+                %>
+
+                <button type="button" class="btn btn-danger"
+                >已翻到头了</button>
+
+                <%
+                }else{
+                %>
+                <button type="button" class="btn btn-warning"
+                ><a href="blog.jsp?pages=<%=pages == "1"? "1": String.valueOf(Integer.parseInt(pages)-1)%>">前一页
+                </a></button>
+                <%
+                    }
+                %>
+            </div>
+            <div class="btn-group" role="group" aria-label="Second group">
+                <button type="button" class="btn btn-success" ><%=pages%></button>
+            </div>
+            <div class="btn-group" role="group" aria-label="Third group">
+
+                <%
+                    if(Integer.parseInt(pages) * 3  >= totalPage){// 是最后一页则不能往后翻了
+
+                %>
+
+                    <button type="button" class="btn btn-danger"
+                    >已翻到底了</button>
+
+                <%
+                    }else{
+                %>
+                    <button type="button" class="btn btn-warning"
+                    ><a href="blog.jsp?pages=<%=pages == "1"? "1": String.valueOf(Integer.parseInt(pages)+1)%>">后一页
+                    </a></button>
+                <%
+                    }
+                %>
+
+                <div class="col-lg-5">
+                    <div class="input-group">
+                        <form action="jump.jsp" method="post">
+                            <input  name="pages" class="form-group-sm" placeholder="电梯">
+                            <button class="btn btn-default" type="submit" >Go!</button>
+                        </form>
+                    </div><!-- /input-group -->
+                </div>
+            </div>
         </div>
     </div>
-    <!--评论内容-->
-    <div class="row page-comments-container">
-        <div class="col-md-12">
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-4">
-        </div>
-    </div>
+
+    <%
+        }
+    %>
     <%@ include file="comm/footer.jsp"%>
 </div>
 <!-- 包含脚本-->

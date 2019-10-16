@@ -16,10 +16,18 @@
 
 <!--主要内容 -->
     <div class="container-fluid main-container" id="main-container">
-        <div class="row top-title">
-            <div class="col-md-12">
-                <h1 class="page-title">
-                    最新文章
+        <div class="row">
+            <div class="col-md-12 top-title">
+                <h1 >
+                    <div class="row">
+                        最新文章
+                        <div class="input-group ">
+                            <input type="text" class="form-control" placeholder="Search for...">
+                            <span class="input-group-btn">
+                        <button class="btn btn-success" type="button">Go!</button>
+                    </span>
+                        </div>
+                    </div>
                 </h1>
             </div>
         </div>

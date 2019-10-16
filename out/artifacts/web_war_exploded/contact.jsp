@@ -6,6 +6,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.LinkedList" %><%-- Created by IntelliJ IDEA. --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<jsp:useBean id="aeticle" class="Bean.Article" scope="session"></jsp:useBean>
 
 <!DOCTYPE html>
 <html lang="cn" dir="ltr" class="no-js">

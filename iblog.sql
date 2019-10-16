@@ -17,35 +17,27 @@ create table tb_user(
 
 # 创建文章表
 create  table  tb_article(
-    id  int not null,                       //博客文章表
-    art_whoId   int,                        //作者id
-    art_title   varchar (50),               //文章标题
-    art_content text,             //文章内容
-    art_pubTime date,                       //发表时间
-    art_count   int,                        //博客点击次数
-    primary key (id)                        //将博客文章表设为主键
+    art_id      int  primary key auto_increment,
+    art_title   varchar (50) not null ,
+    art_class   int not null ,
+    art_tag     int not null ,
+    art_content text not null ,
+    art_time    datetime not null ,
+    art_count   int not null ,
+    art_visible tinyint not null default 1
 );
 
-
-# 创建评论表
-create  table tb_articleR(
-    id  int not null,                       //评论表
-    artReview_rootId    int,                //评论记录的主评论id
-    artReview_author    varchar (50),       //评论的作者
-    artReview_content   varchar (2000),     //评论内容
-    artReview_time      date ,              //评论时间
-    primary key (id)                        //将评论表设为主键
+# 文章类型表
+create table tb_art_class(
+  class_id int primary key auto_increment,
+  class_name varchar(50)
 );
 
-
-# 创建好友表
-create table tb_friend(
-    id  int not null,                       //好友表
-    friend_whoId    int,                    //好友id
-    user_id         int,                    //用户id
-    primary key(id)                         //将好友表设为主键
+# 文章标签表
+create table tb_art_tag(
+  tag_id int primary key auto_increment,
+  tag_name varchar(50)
 );
-
 
 # 创建图片表
 create table tb_photo(
