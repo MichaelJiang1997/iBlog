@@ -20,4 +20,3 @@
   Java HotSpot(TM) 64-Bit Server VM (build 25.181-b13, mixed mode)`
 - 数据库为`Server version: 5.5.64-MariaDB MariaDB Server`
 - Tomcat：`apache-tomcat-9.0.24`
-

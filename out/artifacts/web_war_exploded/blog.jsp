@@ -167,7 +167,7 @@
                 }else{
                 %>
                 <button type="button" class="btn btn-warning"
-                ><a href="blog.jsp?pages=<%=pages == "1"? "1": String.valueOf(Integer.parseInt(pages)-1)%>">前一页
+                ><a href="blog.jsp?pages=<%=String.valueOf(Integer.parseInt(pages)-1)%>">前一页
                 </a></button>
                 <%
                     }
@@ -190,7 +190,7 @@
                     }else{
                 %>
                     <button type="button" class="btn btn-warning"
-                    ><a href="blog.jsp?pages=<%=pages == "1"? "1": String.valueOf(Integer.parseInt(pages)+1)%>">后一页
+                    ><a href="blog.jsp?pages=<%=String.valueOf(Integer.parseInt(pages)+1)%>">后一页
                     </a></button>
                 <%
                     }
