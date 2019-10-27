@@ -1,11 +1,13 @@
-<%@ page import="utils.DBUtils" %>
-<%@ page import="java.sql.Connection" %><%--
+<%--
   Created by IntelliJ IDEA.
   User: Michael Jiang
   Date: 2019/9/25
   Time: 10:14
   To change this template use File | Settings | File Templates.
 --%>
+
+<%@ page import="utils.DBUtils" %>
+<%@ page import="java.sql.Connection" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -27,7 +29,6 @@
         out.write("<br/>");
         out.write((String)session.getAttribute("u_psw"));
         out.write("<br/><a href='editor.jsp'>写文章</a>");
-
 
     }
 
