@@ -47,7 +47,7 @@
                 </div>
                 <div class="list-group" id="site-link-list">
                     <a class="list-group-item" target="_blank"
-                       href="javascript:if(confirm('点击确定将跳转'))window.location='http://www.sencom.top/'">
+                       href="http://www.sencom.top">
                         <h4 class="list-group-item-heading">
                             <i class="fa fa-link">
                             </i>
@@ -60,7 +60,7 @@
                 </div>
                 <div class="list-group" id="site-link-list">
                     <a class="list-group-item" target="_blank"
-                       href="javascript:if(confirm('点击确定将跳转'))window.location='http://blog.zhazhafang.cn/'">
+                       href="http://blog.zhazhafang.cn">
                         <h4 class="list-group-item-heading">
                             <i class="fa fa-link">
                             </i>

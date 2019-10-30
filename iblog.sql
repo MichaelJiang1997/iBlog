@@ -12,8 +12,18 @@ create table tb_user(
     u_motto  varchar(50),
     u_blog_name   varchar(100),
     u_last_login    datetime,
-    u_follow_num     int
+    u_last_ip     varchar(32)
 );
+
+# 用户登录日志
+create table tb_user_log(
+    id  int auto_increment primary key ,
+    u_login_id int,
+    u_login_ip  varchar(32),
+    u_login_time datetime,
+    U_login_flag tinyint(1)
+);
+
 
 # 创建文章表
 create  table  tb_article(
