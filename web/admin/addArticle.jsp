@@ -1,3 +1,20 @@
+<%@ page import="utils.DBUtils" %>
+<%@ page import="java.sql.Connection" %>
+<%@ page import="java.sql.Statement" %>
+<%@ page import="java.sql.ResultSet" %>
+<%@ page import="java.text.SimpleDateFormat" %>
+<%@ page import="java.util.Date" %><%--
+  Created by IntelliJ IDEA.
+  User: Michael Jiang
+  Date: 2019/11/6
+  Time: 14:20
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%
+  request.setCharacterEncoding("UTF-8");
+  if(session.getAttribute("u_name") == null) response.sendRedirect("login.jsp");
+%>
 <!doctype html>
 <html lang="zh-CN">
 <head>
@@ -5,7 +22,7 @@
 <meta name="renderer" content="webkit">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>文章 - 异清轩博客管理系统</title>
+<title>写文章 - iBlog管理系统</title>
 <link rel="stylesheet" type="text/css" href="static/css/bootstrap.min.css">
 <link rel="stylesheet" type="text/css" href="static/css/style.css">
 <link rel="stylesheet" type="text/css" href="static/css/font-awesome.min.css">
@@ -60,17 +77,17 @@
         <li><a href="index.jsp">报告</a></li>
       </ul>
       <ul class="nav nav-sidebar">
-        <li class="active"><a href="article.html">文章</a></li>
-        <li><a href="notice.html">公告</a></li>
-        <li><a href="comment.html">评论</a></li>
+        <li class="active"><a href="article.jsp">文章</a></li>
+        <li><a href="notice.jsp">公告</a></li>
+        <li><a href="comment.jsp">评论</a></li>
         <li><a data-toggle="tooltip" data-placement="top" title="网站暂无留言功能">留言</a></li>
       </ul>
       <ul class="nav nav-sidebar">
-        <li><a href="category.html">栏目</a></li>
+        <li><a href="category.jsp">栏目</a></li>
         <li><a class="dropdown-toggle" id="otherMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">其他</a>
           <ul class="dropdown-menu" aria-labelledby="otherMenu">
-            <li><a href="flink.html">友情链接</a></li>
-            <li><a href="loginlog.html">访问记录</a></li>
+            <li><a href="flink.jsp">友情链接</a></li>
+            <li><a href="loginlog.jsp">访问记录</a></li>
           </ul>
         </li>
       </ul>
@@ -78,15 +95,15 @@
         <li><a class="dropdown-toggle" id="userMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">用户</a>
           <ul class="dropdown-menu" aria-labelledby="userMenu">
             <li><a href="#">管理用户组</a></li>
-            <li><a href="manage-user.html">管理用户</a></li>
+            <li><a href="manageUser.jsp">管理用户</a></li>
             <li role="separator" class="divider"></li>
-            <li><a href="loginlog.html">管理登录日志</a></li>
+            <li><a href="loginlog.jsp">管理登录日志</a></li>
           </ul>
         </li>
         <li><a class="dropdown-toggle" id="settingMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">设置</a>
           <ul class="dropdown-menu" aria-labelledby="settingMenu">
-            <li><a href="setting.html">基本设置</a></li>
-            <li><a href="readset.html">用户设置</a></li>
+            <li><a href="setting.jsp">基本设置</a></li>
+            <li><a href="readset.jsp">用户设置</a></li>
             <li role="separator" class="divider"></li>
             <li><a href="#">安全配置</a></li>
             <li role="separator" class="divider"></li>
@@ -96,112 +113,91 @@
       </ul>
     </aside>
     <div class="col-sm-9 col-sm-offset-3 col-md-10 col-lg-10 col-md-offset-2 main" id="main">
-      <form action="/Article/checkAll" method="post" >
-        <h1 class="page-header">操作</h1>
-        <ol class="breadcrumb">
-          <li><a href="add-article.html">增加文章</a></li>
-        </ol>
-        <h1 class="page-header">管理 <span class="badge">7</span></h1>
-        <div class="table-responsive">
-          <table class="table table-striped table-hover">
-            <thead>
-              <tr>
-                <th><span class="glyphicon glyphicon-th-large"></span> <span class="visible-lg">选择</span></th>
-                <th><span class="glyphicon glyphicon-file"></span> <span class="visible-lg">标题</span></th>
-                <th><span class="glyphicon glyphicon-list"></span> <span class="visible-lg">栏目</span></th>
-                <th class="hidden-sm"><span class="glyphicon glyphicon-tag"></span> <span class="visible-lg">标签</span></th>
-                <th class="hidden-sm"><span class="glyphicon glyphicon-comment"></span> <span class="visible-lg">评论</span></th>
-                <th><span class="glyphicon glyphicon-time"></span> <span class="visible-lg">日期</span></th>
-                <th><span class="glyphicon glyphicon-pencil"></span> <span class="visible-lg">操作</span></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><input type="checkbox" class="input-control" name="checkbox[]" value="" /></td>
-                <td class="article-title">这是测试的文章标题这是测试的文章标题这是测试的文章标题这是测试的文章标题</td>
-                <td>这个是栏目</td>
-                <td class="hidden-sm">PHP、JavaScript</td>
-                <td class="hidden-sm">0</td>
-                <td>2015-12-03</td>
-                <td><a href="update-article.html">修改</a> <a rel="6">删除</a></td>
-              </tr>
-              <tr>
-                <td><input type="checkbox" class="input-control" name="checkbox[]" value="" /></td>
-                <td class="article-title">这是测试的文章标题这是测试的文章标题这是测试的文章标题这是测试的文章标题</td>
-                <td>这个是栏目</td>
-                <td class="hidden-sm">PHP、JavaScript</td>
-                <td class="hidden-sm">0</td>
-                <td>2015-12-03</td>
-                <td><a href="">修改</a> <a rel="6">删除</a></td>
-              </tr>
-              <tr>
-                <td><input type="checkbox" class="input-control" name="checkbox[]" value="" /></td>
-                <td class="article-title">这是测试的文章标题这是测试的文章标题这是测试的文章标题这是测试的文章标题</td>
-                <td>这个是栏目</td>
-                <td class="hidden-sm">PHP、JavaScript</td>
-                <td class="hidden-sm">0</td>
-                <td>2015-12-03</td>
-                <td><a href="">修改</a> <a rel="6">删除</a></td>
-              </tr>
-              <tr>
-                <td><input type="checkbox" class="input-control" name="checkbox[]" value="" /></td>
-                <td class="article-title">这是测试的文章标题这是测试的文章标题这是测试的文章标题这是测试的文章标题</td>
-                <td>这个是栏目</td>
-                <td class="hidden-sm">PHP、JavaScript</td>
-                <td class="hidden-sm">0</td>
-                <td>2015-12-03</td>
-                <td><a href="">修改</a> <a rel="6">删除</a></td>
-              </tr>
-              <tr>
-                <td><input type="checkbox" class="input-control" name="checkbox[]" value="" /></td>
-                <td class="article-title">这是测试的文章标题这是测试的文章标题这是测试的文章标题这是测试的文章标题</td>
-                <td>这个是栏目</td>
-                <td class="hidden-sm">PHP、JavaScript</td>
-                <td class="hidden-sm">0</td>
-                <td>2015-12-03</td>
-                <td><a href="">修改</a> <a rel="6">删除</a></td>
-              </tr>
-              <tr>
-                <td><input type="checkbox" class="input-control" name="checkbox[]" value="" /></td>
-                <td class="article-title">这是测试的文章标题这是测试的文章标题这是测试的文章标题这是测试的文章标题</td>
-                <td>这个是栏目</td>
-                <td class="hidden-sm">PHP、JavaScript</td>
-                <td class="hidden-sm">0</td>
-                <td>2015-12-03</td>
-                <td><a href="">修改</a> <a rel="6">删除</a></td>
-              </tr>
-              <tr>
-                <td><input type="checkbox" class="input-control" name="checkbox[]" value="" /></td>
-                <td class="article-title">这是测试的文章标题这是测试的文章标题这是测试的文章标题这是测试的文章标题</td>
-                <td>这个是栏目</td>
-                <td class="hidden-sm">PHP、JavaScript</td>
-                <td class="hidden-sm">0</td>
-                <td>2015-12-03</td>
-                <td><a href="">修改</a> <a rel="6">删除</a></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <footer class="message_footer">
-          <nav>
-            <div class="btn-toolbar operation" role="toolbar">
-              <div class="btn-group" role="group"> <a class="btn btn-default" onClick="select()">全选</a> <a class="btn btn-default" onClick="reverse()">反选</a> <a class="btn btn-default" onClick="noselect()">不选</a> </div>
-              <div class="btn-group" role="group">
-                <button type="submit" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="删除全部选中" name="checkbox_delete">删除</button>
+      <div class="row">
+        <form action="launchArticleAction.jsp" method="post" class="add-article-form">
+          <div class="col-md-9">
+            <h1 class="page-header">撰写新文章</h1>
+            <div class="form-group">
+              <label for="article-title" class="sr-only">标题</label>
+              <input type="text" id="article-title" name="title" class="form-control" placeholder="在此处输入标题" required autofocus autocomplete="off">
+            </div>
+            <div class="form-group">
+              <label for="article-content" class="sr-only">内容</label>
+              <script id="article-content" name="content" type="text/plain"></script>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <h1 class="page-header">操作</h1>
+            <div class="add-article-box">
+              <h2 class="add-article-box-title"><span>栏目</span></h2>
+              <div class="add-article-box-content">
+                <ul class="category-list">
+                <%
+                  // 获取 分类 表
+                  Connection conn = DBUtils.getConnection();
+                  Statement sm = conn.createStatement();
+                  String sql = "select * from tb_art_class";
+
+                  ResultSet res = sm.executeQuery(sql);
+                  while (res.next()){
+                %>
+                  <li>
+                    <label>
+                      <input name="class_id" type="radio" value="<%=res.getString("class_id")%>" checked>
+                      <%=res.getString("class_name")%></label>
+                  </li>
+                <%
+                  }
+                %>
+                </ul>
               </div>
             </div>
-            <ul class="pagination pagenav">
-              <li class="disabled"><a aria-label="Previous"> <span aria-hidden="true">&laquo;</span> </a> </li>
-              <li class="active"><a href="#">1</a></li>
-              <li><a href="#">2</a></li>
-              <li><a href="#">3</a></li>
-              <li><a href="#">4</a></li>
-              <li><a href="#">5</a></li>
-              <li><a href="#" aria-label="Next"> <span aria-hidden="true">&raquo;</span> </a> </li>
-            </ul>
-          </nav>
-        </footer>
-      </form>
+            <div class="add-article-box">
+              <h2 class="add-article-box-title"><span>标签</span></h2>
+              <div class="add-article-box-content">
+                <%
+                  // 获取 标签 表
+                  conn = DBUtils.getConnection();
+                  sm = conn.createStatement();
+                  sql = "select * from tb_art_tag";
+
+                  res = sm.executeQuery(sql);
+                  while (res.next()){
+                %>
+                <li>
+                  <label>
+                    <input name="tag_id" type="radio" value="<%=res.getString("tag_id")%>" checked>
+                    <%=res.getString("tag_name")%></label>
+                </li>
+                <%
+                  }
+                %>
+              </div>
+            </div>
+            <div class="add-article-box">
+              <h2 class="add-article-box-title"><span>标题图片</span></h2>
+              <div class="add-article-box-content">
+                <input type="text" class="form-control" placeholder="点击按钮选择图片" id="pictureUpload" name="titlepic" autocomplete="off">
+              </div>
+              <div class="add-article-box-footer">
+                <button class="btn btn-default" type="button" ID="upImage">选择</button>
+              </div>
+            </div>
+            <div class="add-article-box">
+              <h2 class="add-article-box-title"><span>发布</span></h2>
+              <div class="add-article-box-content">
+              	<p><label>状态：</label><span class="article-status-display">未发布</span></p>
+                <p><label>公开度：</label><input type="radio" name="visibility" value="0" checked/>公开 <input type="radio" name="visibility" value="1" />加密</p>
+                <p><label>发布于：</label><span class="article-time-display"><input style="border: none;" type="datetime"
+                                                                                name="time" value="<%=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())%>" /></span></p>
+              </div>
+              <div class="add-article-box-footer">
+                <button class="btn btn-primary" type="submit" name="submit">发布</button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
     </div>
   </div>
 </section>
@@ -334,41 +330,50 @@
     </div>
   </div>
 </div>
-<!--右键菜单列表-->
-<div id="rightClickMenu">
-  <ul class="list-group rightClickMenuList">
-    <li class="list-group-item disabled">欢迎访问异清轩博客</li>
-    <li class="list-group-item"><span>IP：</span>172.16.10.129</li>
-    <li class="list-group-item"><span>地址：</span>河南省郑州市</li>
-    <li class="list-group-item"><span>系统：</span>Windows10 </li>
-    <li class="list-group-item"><span>浏览器：</span>Chrome47</li>
-  </ul>
-</div>
+
 <script src="static/js/bootstrap.min.js"></script>
 <script src="static/js/admin-scripts.js"></script>
-<script>
-//是否确认删除
-$(function(){   
-	$("#main table tbody tr td a").click(function(){
-		var name = $(this);
-		var id = name.attr("rel"); //对应id  
-		if (event.srcElement.outerText == "删除") 
-		{
-			if(window.confirm("此操作不可逆，是否确认？"))
-			{
-				$.ajax({
-					type: "POST",
-					url: "/Article/delete",
-					data: "id=" + id,
-					cache: false, //不缓存此页面   
-					success: function (data) {
-						window.location.reload();
-					}
-				});
-			};
-		};
-	});   
+<script src="static/lib/ueditor/ueditor.config.js"></script>
+<script src="static/lib/ueditor/ueditor.all.min.js"> </script>
+<script src="static/lib/ueditor/lang/zh-cn/zh-cn.js"></script>
+<script id="uploadEditor" type="text/plain" style="display:none;"></script>
+<script type="text/javascript">
+var editor = UE.getEditor('article-content');
+window.onresize=function(){
+    window.location.reload();
+}
+var _uploadEditor;
+$(function () {
+    //重新实例化一个编辑器，防止在上面的editor编辑器中显示上传的图片或者文件
+    _uploadEditor = UE.getEditor('uploadEditor');
+    _uploadEditor.ready(function () {
+        //设置编辑器不可用
+        //_uploadEditor.setDisabled();
+        //隐藏编辑器，因为不会用到这个编辑器实例，所以要隐藏
+        _uploadEditor.hide();
+        //侦听图片上传
+        _uploadEditor.addListener('beforeInsertImage', function (t, arg) {
+            //将地址赋值给相应的input,只去第一张图片的路径
+            $("#pictureUpload").attr("value", arg[0].src);
+            //图片预览
+            //$("#imgPreview").attr("src", arg[0].src);
+        })
+        //侦听文件上传，取上传文件列表中第一个上传的文件的路径
+        _uploadEditor.addListener('afterUpfile', function (t, arg) {
+            $("#fileUpload").attr("value", _uploadEditor.options.filePath + arg[0].url);
+        })
+    });
 });
+//弹出图片上传的对话框
+$('#upImage').click(function () {
+    var myImage = _uploadEditor.getDialog("insertimage");
+    myImage.open();
+});
+//弹出文件上传的对话框
+function upFiles() {
+    var myFiles = _uploadEditor.getDialog("attachment");
+    myFiles.open();
+}
 </script>
 </body>
 </html>

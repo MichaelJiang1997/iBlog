@@ -1,3 +1,35 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: Michael Jiang
+  Date: 2019/11/6
+  Time: 15:48
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page import="java.sql.Connection" %>
+<%@ page import="utils.DBUtils" %>
+<%@ page import="java.sql.ResultSet" %>
+<%@ page import="java.sql.Statement" %>
+<%@ page import="sun.security.pkcs11.Secmod" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%
+  // 防止非法访问
+  request.setCharacterEncoding("UTF-8");
+  if(session.getAttribute("u_name") == null) response.sendRedirect("login.jsp");
+%>
+
+<%
+  // 拿get参数看看是要改哪个东西！
+  String classId = request.getParameter("class_id");
+  String tagId = request.getParameter("tag_id");
+
+
+  Connection conn = DBUtils.getConnection();
+  Statement sm = conn.createStatement();
+  ResultSet res;
+  String sql;
+
+%>
+
 <!doctype html>
 <html lang="zh-CN">
 <head>
@@ -5,7 +37,7 @@
 <meta name="renderer" content="webkit">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>文章 - 异清轩博客管理系统</title>
+<title>修改栏目 - iBlog管理系统</title>
 <link rel="stylesheet" type="text/css" href="static/css/bootstrap.min.css">
 <link rel="stylesheet" type="text/css" href="static/css/style.css">
 <link rel="stylesheet" type="text/css" href="static/css/font-awesome.min.css">
@@ -60,17 +92,17 @@
         <li><a href="index.jsp">报告</a></li>
       </ul>
       <ul class="nav nav-sidebar">
-        <li class="active"><a href="article.html">文章</a></li>
-        <li><a href="notice.html">公告</a></li>
-        <li><a href="comment.html">评论</a></li>
+        <li><a href="article.jsp">文章</a></li>
+        <li><a href="notice.jsp">公告</a></li>
+        <li><a href="comment.jsp">评论</a></li>
         <li><a data-toggle="tooltip" data-placement="top" title="网站暂无留言功能">留言</a></li>
       </ul>
       <ul class="nav nav-sidebar">
-        <li><a href="category.html">栏目</a></li>
+        <li class="active"><a href="category.jsp">栏目</a></li>
         <li><a class="dropdown-toggle" id="otherMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">其他</a>
           <ul class="dropdown-menu" aria-labelledby="otherMenu">
-            <li><a href="flink.html">友情链接</a></li>
-            <li><a href="loginlog.html">访问记录</a></li>
+            <li><a href="flink.jsp">友情链接</a></li>
+            <li><a href="loginlog.jsp">访问记录</a></li>
           </ul>
         </li>
       </ul>
@@ -78,15 +110,15 @@
         <li><a class="dropdown-toggle" id="userMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">用户</a>
           <ul class="dropdown-menu" aria-labelledby="userMenu">
             <li><a href="#">管理用户组</a></li>
-            <li><a href="manage-user.html">管理用户</a></li>
+            <li><a href="manageUser.jsp">管理用户</a></li>
             <li role="separator" class="divider"></li>
-            <li><a href="loginlog.html">管理登录日志</a></li>
+            <li><a href="loginlog.jsp">管理登录日志</a></li>
           </ul>
         </li>
         <li><a class="dropdown-toggle" id="settingMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">设置</a>
           <ul class="dropdown-menu" aria-labelledby="settingMenu">
-            <li><a href="setting.html">基本设置</a></li>
-            <li><a href="readset.html">用户设置</a></li>
+            <li><a href="setting.jsp">基本设置</a></li>
+            <li><a href="readset.jsp">用户设置</a></li>
             <li role="separator" class="divider"></li>
             <li><a href="#">安全配置</a></li>
             <li role="separator" class="divider"></li>
@@ -95,113 +127,70 @@
         </li>
       </ul>
     </aside>
+
     <div class="col-sm-9 col-sm-offset-3 col-md-10 col-lg-10 col-md-offset-2 main" id="main">
-      <form action="/Article/checkAll" method="post" >
-        <h1 class="page-header">操作</h1>
-        <ol class="breadcrumb">
-          <li><a href="add-article.html">增加文章</a></li>
-        </ol>
-        <h1 class="page-header">管理 <span class="badge">7</span></h1>
-        <div class="table-responsive">
-          <table class="table table-striped table-hover">
-            <thead>
-              <tr>
-                <th><span class="glyphicon glyphicon-th-large"></span> <span class="visible-lg">选择</span></th>
-                <th><span class="glyphicon glyphicon-file"></span> <span class="visible-lg">标题</span></th>
-                <th><span class="glyphicon glyphicon-list"></span> <span class="visible-lg">栏目</span></th>
-                <th class="hidden-sm"><span class="glyphicon glyphicon-tag"></span> <span class="visible-lg">标签</span></th>
-                <th class="hidden-sm"><span class="glyphicon glyphicon-comment"></span> <span class="visible-lg">评论</span></th>
-                <th><span class="glyphicon glyphicon-time"></span> <span class="visible-lg">日期</span></th>
-                <th><span class="glyphicon glyphicon-pencil"></span> <span class="visible-lg">操作</span></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><input type="checkbox" class="input-control" name="checkbox[]" value="" /></td>
-                <td class="article-title">这是测试的文章标题这是测试的文章标题这是测试的文章标题这是测试的文章标题</td>
-                <td>这个是栏目</td>
-                <td class="hidden-sm">PHP、JavaScript</td>
-                <td class="hidden-sm">0</td>
-                <td>2015-12-03</td>
-                <td><a href="update-article.html">修改</a> <a rel="6">删除</a></td>
-              </tr>
-              <tr>
-                <td><input type="checkbox" class="input-control" name="checkbox[]" value="" /></td>
-                <td class="article-title">这是测试的文章标题这是测试的文章标题这是测试的文章标题这是测试的文章标题</td>
-                <td>这个是栏目</td>
-                <td class="hidden-sm">PHP、JavaScript</td>
-                <td class="hidden-sm">0</td>
-                <td>2015-12-03</td>
-                <td><a href="">修改</a> <a rel="6">删除</a></td>
-              </tr>
-              <tr>
-                <td><input type="checkbox" class="input-control" name="checkbox[]" value="" /></td>
-                <td class="article-title">这是测试的文章标题这是测试的文章标题这是测试的文章标题这是测试的文章标题</td>
-                <td>这个是栏目</td>
-                <td class="hidden-sm">PHP、JavaScript</td>
-                <td class="hidden-sm">0</td>
-                <td>2015-12-03</td>
-                <td><a href="">修改</a> <a rel="6">删除</a></td>
-              </tr>
-              <tr>
-                <td><input type="checkbox" class="input-control" name="checkbox[]" value="" /></td>
-                <td class="article-title">这是测试的文章标题这是测试的文章标题这是测试的文章标题这是测试的文章标题</td>
-                <td>这个是栏目</td>
-                <td class="hidden-sm">PHP、JavaScript</td>
-                <td class="hidden-sm">0</td>
-                <td>2015-12-03</td>
-                <td><a href="">修改</a> <a rel="6">删除</a></td>
-              </tr>
-              <tr>
-                <td><input type="checkbox" class="input-control" name="checkbox[]" value="" /></td>
-                <td class="article-title">这是测试的文章标题这是测试的文章标题这是测试的文章标题这是测试的文章标题</td>
-                <td>这个是栏目</td>
-                <td class="hidden-sm">PHP、JavaScript</td>
-                <td class="hidden-sm">0</td>
-                <td>2015-12-03</td>
-                <td><a href="">修改</a> <a rel="6">删除</a></td>
-              </tr>
-              <tr>
-                <td><input type="checkbox" class="input-control" name="checkbox[]" value="" /></td>
-                <td class="article-title">这是测试的文章标题这是测试的文章标题这是测试的文章标题这是测试的文章标题</td>
-                <td>这个是栏目</td>
-                <td class="hidden-sm">PHP、JavaScript</td>
-                <td class="hidden-sm">0</td>
-                <td>2015-12-03</td>
-                <td><a href="">修改</a> <a rel="6">删除</a></td>
-              </tr>
-              <tr>
-                <td><input type="checkbox" class="input-control" name="checkbox[]" value="" /></td>
-                <td class="article-title">这是测试的文章标题这是测试的文章标题这是测试的文章标题这是测试的文章标题</td>
-                <td>这个是栏目</td>
-                <td class="hidden-sm">PHP、JavaScript</td>
-                <td class="hidden-sm">0</td>
-                <td>2015-12-03</td>
-                <td><a href="">修改</a> <a rel="6">删除</a></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <footer class="message_footer">
-          <nav>
-            <div class="btn-toolbar operation" role="toolbar">
-              <div class="btn-group" role="group"> <a class="btn btn-default" onClick="select()">全选</a> <a class="btn btn-default" onClick="reverse()">反选</a> <a class="btn btn-default" onClick="noselect()">不选</a> </div>
-              <div class="btn-group" role="group">
-                <button type="submit" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="删除全部选中" name="checkbox_delete">删除</button>
-              </div>
-            </div>
-            <ul class="pagination pagenav">
-              <li class="disabled"><a aria-label="Previous"> <span aria-hidden="true">&laquo;</span> </a> </li>
-              <li class="active"><a href="#">1</a></li>
-              <li><a href="#">2</a></li>
-              <li><a href="#">3</a></li>
-              <li><a href="#">4</a></li>
-              <li><a href="#">5</a></li>
-              <li><a href="#" aria-label="Next"> <span aria-hidden="true">&raquo;</span> </a> </li>
-            </ul>
-          </nav>
-        </footer>
+
+    <%
+      if(classId != null){
+        String className ="";
+        sql = "select * from tb_art_class where class_id=" + classId;
+
+        res = sm.executeQuery(sql);
+        while (res.next()) {
+          className = res.getString("class_name");
+        }
+    %>
+
+      <h1 class="page-header">修改栏目</h1>
+      <form action="updateCategoryTagAction.jsp?class_id=<%=classId%>" method="post">
+        <div class="form-group">
+          <label for="category-name">栏目名称</label>
+          <input type="text" id="category-name" name="class_name" value="<%=className%>" class="form-control"
+                 placeholder="在此处输入栏目名称" required autocomplete="off">
+          <span class="prompt-text">这将是它在站点上显示的名字。</span> </div>
+        <div class="form-group">
+          <label for="category-alias">栏目别名</label>
+          <input type="text" id="category-alias" name="alias" value="invalid" class="form-control"
+                 placeholder="在此处输入栏目别名"
+                 required autocomplete="off">
+          <span class="prompt-text">“别名”是在URL中使用的别称，它可以令URL更美观。通常使用小写，只能包含字母，数字和连字符（-）。</span> </div>
+        <button class="btn btn-primary" type="submit" name="submit">更新</button>
       </form>
+
+    <%
+      }
+    %>
+
+      <%
+        if(tagId != null){
+          String tagName ="";
+          sql = "select * from tb_art_tag where tag_id=" + tagId;
+
+          res = sm.executeQuery(sql);
+          while (res.next()) {
+            tagName = res.getString("tag_name");
+          }
+      %>
+
+      <h1 class="page-header">标签栏目</h1>
+      <form action="updateCategoryTagAction.jsp?tag_id=<%=tagId%>" method="post">
+        <div class="form-group">
+          <label for="category-name">标签名称</label>
+          <input type="text" id="tag-name" name="tag_name" value="<%=tagName%>" class="form-control"
+                 placeholder="在此处输入栏目名称" required autocomplete="off">
+          <span class="prompt-text">这将是它在站点上显示的名字。</span> </div>
+        <div class="form-group">
+          <label for="category-alias">标签别名</label>
+          <input type="text" id="tag-alias" name="alias" value="invalid" class="form-control"
+                 placeholder="在此处输入栏目别名"
+                 required autocomplete="off">
+          <span class="prompt-text">“别名”是在URL中使用的别称，它可以令URL更美观。通常使用小写，只能包含字母，数字和连字符（-）。</span> </div>
+        <button class="btn btn-primary" type="submit" name="submit">更新</button>
+      </form>
+
+      <%
+        }
+      %>
     </div>
   </div>
 </section>
@@ -334,41 +323,8 @@
     </div>
   </div>
 </div>
-<!--右键菜单列表-->
-<div id="rightClickMenu">
-  <ul class="list-group rightClickMenuList">
-    <li class="list-group-item disabled">欢迎访问异清轩博客</li>
-    <li class="list-group-item"><span>IP：</span>172.16.10.129</li>
-    <li class="list-group-item"><span>地址：</span>河南省郑州市</li>
-    <li class="list-group-item"><span>系统：</span>Windows10 </li>
-    <li class="list-group-item"><span>浏览器：</span>Chrome47</li>
-  </ul>
-</div>
+
 <script src="static/js/bootstrap.min.js"></script>
 <script src="static/js/admin-scripts.js"></script>
-<script>
-//是否确认删除
-$(function(){   
-	$("#main table tbody tr td a").click(function(){
-		var name = $(this);
-		var id = name.attr("rel"); //对应id  
-		if (event.srcElement.outerText == "删除") 
-		{
-			if(window.confirm("此操作不可逆，是否确认？"))
-			{
-				$.ajax({
-					type: "POST",
-					url: "/Article/delete",
-					data: "id=" + id,
-					cache: false, //不缓存此页面   
-					success: function (data) {
-						window.location.reload();
-					}
-				});
-			};
-		};
-	});   
-});
-</script>
 </body>
 </html>
