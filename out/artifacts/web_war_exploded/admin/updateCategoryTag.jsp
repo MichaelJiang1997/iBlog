@@ -1,3 +1,35 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: Michael Jiang
+  Date: 2019/11/6
+  Time: 15:48
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page import="java.sql.Connection" %>
+<%@ page import="utils.DBUtils" %>
+<%@ page import="java.sql.ResultSet" %>
+<%@ page import="java.sql.Statement" %>
+<%@ page import="sun.security.pkcs11.Secmod" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%
+  // 防止非法访问
+  request.setCharacterEncoding("UTF-8");
+  if(session.getAttribute("u_name") == null) response.sendRedirect("login.jsp");
+%>
+
+<%
+  // 拿get参数看看是要改哪个东西！
+  String classId = request.getParameter("class_id");
+  String tagId = request.getParameter("tag_id");
+
+
+  Connection conn = DBUtils.getConnection();
+  Statement sm = conn.createStatement();
+  ResultSet res;
+  String sql;
+
+%>
+
 <!doctype html>
 <html lang="zh-CN">
 <head>
@@ -5,7 +37,7 @@
 <meta name="renderer" content="webkit">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>增加友情链接 - 异清轩博客管理系统</title>
+<title>修改栏目 - iBlog管理系统</title>
 <link rel="stylesheet" type="text/css" href="static/css/bootstrap.min.css">
 <link rel="stylesheet" type="text/css" href="static/css/style.css">
 <link rel="stylesheet" type="text/css" href="static/css/font-awesome.min.css">
@@ -66,8 +98,8 @@
         <li><a data-toggle="tooltip" data-placement="top" title="网站暂无留言功能">留言</a></li>
       </ul>
       <ul class="nav nav-sidebar">
-        <li><a href="category.jsp">栏目</a></li>
-        <li class="active"><a class="dropdown-toggle" id="otherMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">其他</a>
+        <li class="active"><a href="category.jsp">栏目</a></li>
+        <li><a class="dropdown-toggle" id="otherMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">其他</a>
           <ul class="dropdown-menu" aria-labelledby="otherMenu">
             <li><a href="flink.jsp">友情链接</a></li>
             <li><a href="loginlog.jsp">访问记录</a></li>
@@ -95,59 +127,70 @@
         </li>
       </ul>
     </aside>
+
     <div class="col-sm-9 col-sm-offset-3 col-md-10 col-lg-10 col-md-offset-2 main" id="main">
-      <div class="row">
-        <form action="/Flink/add" method="post" class="add-flink-form" autocomplete="off" draggable="false">
-          <div class="col-md-9">
-            <h1 class="page-header">增加友情链接</h1>
-            <div class="add-article-box">
-              <h2 class="add-article-box-title"><span>名称</span></h2>
-              <div class="add-article-box-content">
-                <input type="text" id="flink-name" name="name" class="form-control" placeholder="在此处输入名称" required autofocus autocomplete="off">
-                <span class="prompt-text">例如：异清轩技术博客</span> </div>
-            </div>
-            <div class="add-article-box">
-              <h2 class="add-article-box-title"><span>WEB地址</span></h2>
-              <div class="add-article-box-content">
-                <input type="text" id="flink-url" name="url" class="form-control" placeholder="在此处输入URL地址" required autocomplete="off">
-                <span class="prompt-text">例子：<code>http://www.ylsat.com/</code>——不要忘了<code>http://</code></span> </div>
-            </div>
-            <div class="add-article-box">
-              <h2 class="add-article-box-title"><span>图像地址</span></h2>
-              <div class="add-article-box-content">
-                <input type="text" id="flink-imgurl" name="imgurl" class="form-control" placeholder="在此处输入图像地址" required autocomplete="off">
-                <span class="prompt-text">图像地址是可选的，可以为网站LOGO地址等</span> </div>
-            </div>
-            <div class="add-article-box">
-              <h2 class="add-article-box-title"><span>描述</span></h2>
-              <div class="add-article-box-content">
-                <textarea class="form-control" name="describe" autocomplete="off"></textarea>
-                <span class="prompt-text">描述是可选的手工创建的内容总结</span> </div>
-            </div>
-          </div>
-          <div class="col-md-3">
-            <h1 class="page-header">操作</h1>
-            <div class="add-article-box">
-              <h2 class="add-article-box-title"><span>保存</span></h2>
-              <div class="add-article-box-content">
-                <p>
-                  <label>状态：</label>
-                  <span class="article-status-display">未增加</span></p>
-                <p><label>target：</label><input type="radio" name="target" value="0" checked />_blank&nbsp;&nbsp;<input type="radio" name="target" value="1" />_self&nbsp;&nbsp;<input type="radio" name="target" value="2" />_top</p>
-                <p><label>rel：</label><input type="radio" name="rel" value="0" checked />nofollow&nbsp;&nbsp;<input type="radio" name="rel" value="1"/>none</p>
-                <p>
-                  <label>增加于：</label>
-                  <span class="article-time-display">
-                  <input style="border: none;" type="datetime" name="time" value="2016-01-09 17:29:37" />
-                  </span></p>
-              </div>
-              <div class="add-article-box-footer">
-                <button class="btn btn-primary" type="submit" name="submit">增加</button>
-              </div>
-            </div>
-          </div>
-        </form>
-      </div>
+
+    <%
+      if(classId != null){
+        String className ="";
+        sql = "select * from tb_art_class where class_id=" + classId;
+
+        res = sm.executeQuery(sql);
+        while (res.next()) {
+          className = res.getString("class_name");
+        }
+    %>
+
+      <h1 class="page-header">修改栏目</h1>
+      <form action="updateCategoryTagAction.jsp?class_id=<%=classId%>" method="post">
+        <div class="form-group">
+          <label for="category-name">栏目名称</label>
+          <input type="text" id="category-name" name="class_name" value="<%=className%>" class="form-control"
+                 placeholder="在此处输入栏目名称" required autocomplete="off">
+          <span class="prompt-text">这将是它在站点上显示的名字。</span> </div>
+        <div class="form-group">
+          <label for="category-alias">栏目别名</label>
+          <input type="text" id="category-alias" name="alias" value="invalid" class="form-control"
+                 placeholder="在此处输入栏目别名"
+                 required autocomplete="off">
+          <span class="prompt-text">“别名”是在URL中使用的别称，它可以令URL更美观。通常使用小写，只能包含字母，数字和连字符（-）。</span> </div>
+        <button class="btn btn-primary" type="submit" name="submit">更新</button>
+      </form>
+
+    <%
+      }
+    %>
+
+      <%
+        if(tagId != null){
+          String tagName ="";
+          sql = "select * from tb_art_tag where tag_id=" + tagId;
+
+          res = sm.executeQuery(sql);
+          while (res.next()) {
+            tagName = res.getString("tag_name");
+          }
+      %>
+
+      <h1 class="page-header">标签栏目</h1>
+      <form action="updateCategoryTagAction.jsp?tag_id=<%=tagId%>" method="post">
+        <div class="form-group">
+          <label for="category-name">标签名称</label>
+          <input type="text" id="tag-name" name="tag_name" value="<%=tagName%>" class="form-control"
+                 placeholder="在此处输入栏目名称" required autocomplete="off">
+          <span class="prompt-text">这将是它在站点上显示的名字。</span> </div>
+        <div class="form-group">
+          <label for="category-alias">标签别名</label>
+          <input type="text" id="tag-alias" name="alias" value="invalid" class="form-control"
+                 placeholder="在此处输入栏目别名"
+                 required autocomplete="off">
+          <span class="prompt-text">“别名”是在URL中使用的别称，它可以令URL更美观。通常使用小写，只能包含字母，数字和连字符（-）。</span> </div>
+        <button class="btn btn-primary" type="submit" name="submit">更新</button>
+      </form>
+
+      <%
+        }
+      %>
     </div>
   </div>
 </section>
@@ -280,16 +323,7 @@
     </div>
   </div>
 </div>
-<!--右键菜单列表-->
-<div id="rightClickMenu">
-  <ul class="list-group rightClickMenuList">
-    <li class="list-group-item disabled">欢迎访问异清轩博客</li>
-    <li class="list-group-item"><span>IP：</span>172.16.10.129</li>
-    <li class="list-group-item"><span>地址：</span>河南省郑州市</li>
-    <li class="list-group-item"><span>系统：</span>Windows10 </li>
-    <li class="list-group-item"><span>浏览器：</span>Chrome47</li>
-  </ul>
-</div>
+
 <script src="static/js/bootstrap.min.js"></script>
 <script src="static/js/admin-scripts.js"></script>
 </body>

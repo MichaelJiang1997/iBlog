@@ -1,10 +1,16 @@
-<%-- Created by IntelliJ IDEA. --%>
+<%@ page import="java.sql.Connection" %>
+<%@ page import="utils.DBUtils" %>
+<%@ page import="java.sql.Statement" %>
+<%@ page import="java.sql.ResultSet" %><%-- Created by IntelliJ IDEA. --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <!DOCTYPE html>
 <html lang="cn" dir="ltr" class="no-js">
 
-<%@ include file="comm/header.jsp"%>
+<jsp:include page="comm/header.jsp">
+    <jsp:param value="flink" name="now"/>
+</jsp:include>
+
 
 
 <body>
@@ -45,68 +51,31 @@
                         </div>
                     </div>
                 </div>
-                <div class="list-group" id="site-link-list">
+                <%
+                    // 读取友链表数据
+                    Connection conn = DBUtils.getConnection();
+                    Statement sm = conn.createStatement();
+                    String sql = "select * from tb_flink";
+                    ResultSet res = sm.executeQuery(sql);
+                    while (res.next()){
+                %>
+                    <div class="list-group" id="site-link-list">
                     <a class="list-group-item" target="_blank"
-                       href="http://www.sencom.top">
+                       href="<%=res.getString("flink_addr")%>">
                         <h4 class="list-group-item-heading">
                             <i class="fa fa-link">
                             </i>
-                            Michael's Blog
+                            <%=res.getString("flink_name")%>
                         </h4>
                         <p class="list-group-item-text">
-                            专业Coder
+                            <%=res.getString("flink_desc")%>
                         </p>
                     </a>
                 </div>
-                <div class="list-group" id="site-link-list">
-                    <a class="list-group-item" target="_blank"
-                       href="http://blog.zhazhafang.cn">
-                        <h4 class="list-group-item-heading">
-                            <i class="fa fa-link">
-                            </i>
-                            渣渣方
-                        </h4>
-                        <p class="list-group-item-text">
-                            一个懒癌+妄想症的处女座程序员
-                        </p>
-                    </a>
-                </div>
-                <div class="list-group" id="site-link-list">
-                    <a class="list-group-item" target="_blank" href="javascript:if(confirm('点击确定将跳转'))window.location='http://www.ybsat.com/'">
-                        <h4 class="list-group-item-heading">
-                            <i class="fa fa-link">
-                            </i>
-                            异步
-                        </h4>
-                        <p class="list-group-item-text">
-                            异步
-                        </p>
-                    </a>
-                </div>
-                <div class="list-group" id="site-link-list">
-                    <a class="list-group-item" target="_blank" href="javascript:if(confirm('点击确定将跳转'))window.location='http://www.ybsat.com/'">
-                        <h4 class="list-group-item-heading">
-                            <i class="fa fa-link">
-                            </i>
-                            异步
-                        </h4>
-                        <p class="list-group-item-text">
-                            异步
-                        </p>
-                    </a>
-                </div>
-                <div class="list-group" id="site-link-list">
-                    <a class="list-group-item" target="_blank" href="javascript:if(confirm('点击确定将跳转'))window.location='http://www.ybsat.com/'">
-                        <h4 class="list-group-item-heading">
-                            <i class="fa fa-link">
-                            </i>
-                            异步
-                        </h4>
-                        <p class="list-group-item-text">
-                            异步
-                        </p>
-                    </a>
-                </div>
+                <%
+                    }
+                    DBUtils.closeAll(conn);
+                %>
             </div>
             <div class="meta-box">
             </div>

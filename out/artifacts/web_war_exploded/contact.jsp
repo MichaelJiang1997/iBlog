@@ -11,7 +11,10 @@
 <!DOCTYPE html>
 <html lang="cn" dir="ltr" class="no-js">
 
-<%@ include file="comm/header.jsp"%>
+<jsp:include page="comm/header.jsp">
+    <jsp:param value="contact" name="now"/>
+</jsp:include>
+
 
 
 <body>

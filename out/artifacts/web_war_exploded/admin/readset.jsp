@@ -19,7 +19,7 @@
 <meta name="renderer" content="webkit">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>常规设置 - iBlog管理系统</title>
+<title>阅读设置 - 异清轩博客管理系统</title>
 <link rel="stylesheet" type="text/css" href="static/css/bootstrap.min.css">
 <link rel="stylesheet" type="text/css" href="static/css/style.css">
 <link rel="stylesheet" type="text/css" href="static/css/font-awesome.min.css">
@@ -45,54 +45,43 @@
   <div class="row">
     <!--通用侧边栏-->
     <jsp:include page="comm/sidebar.jsp">
-      <jsp:param value="setting" name="now"/>
+      <jsp:param value="readset" name="now"/>
     </jsp:include>
 
 
-    <%
-
-      // 拿站点信息
-      Connection conn = DBUtils.getConnection();
-      Statement sm = conn.createStatement();
-      String sql = "select * from tb_siteinfo";
-
-      ResultSet res = sm.executeQuery(sql);
-
-      while (res.next()){
-    %>
-        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-lg-10 col-md-offset-2 main" id="main">
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-lg-10 col-md-offset-2 main" id="main">
       <div class="row">
-        <form action="updateSetting.jsp" method="post" autocomplete="off" draggable="false">
+        <form action="/Setting/read" method="post" autocomplete="off" draggable="false">
           <div class="col-md-9">
-            <h1 class="page-header">常规设置</h1>
+            <h1 class="page-header">用户设置</h1>
             <div class="add-article-box">
               <h2 class="add-article-box-title"><span>站点标题</span></h2>
               <div class="add-article-box-content">
-                <input type="text" name="site_title" class="form-control" value="<%=res.getString("site_title")%>"
-                       required autofocus
-                       autocomplete="off">
+                <input type="text" name="title" class="form-control" placeholder="请输入站点标题" required autofocus autocomplete="off">
               </div>
             </div>
             <div class="add-article-box">
               <h2 class="add-article-box-title"><span>副标题</span></h2>
               <div class="add-article-box-content">
-                <input type="text" name="site_subtitle" class="form-control"
-                       value="<%=res.getString("site_subtitle")%>"
-                       autocomplete="off">
+                <input type="text" name="ftitle" class="form-control" placeholder="请输入站点副标题" autocomplete="off">
                 <span class="prompt-text">用简洁的文字描述本站点。</span> </div>
+            </div>
+            <div class="add-article-box">
+              <h2 class="add-article-box-title"><span>站点地址（URL）</span></h2>
+              <div class="add-article-box-content">
+                <input type="text" name="siteurl" class="form-control" placeholder="在此处输入站点地址（URL）" required autocomplete="off">
+              </div>
             </div>
             <div class="add-article-box">
               <h2 class="add-article-box-title"><span>站点关键字</span></h2>
               <div class="add-article-box-content">
-                <textarea class="form-control" name="site_keyword"
-                          autocomplete="off"><%=res.getString("site_keyword")%></textarea>
+                <textarea class="form-control" name="keywords" autocomplete="off"></textarea>
                 <span class="prompt-text">关键字会出现在网页的keywords属性中。</span> </div>
             </div>
             <div class="add-article-box">
               <h2 class="add-article-box-title"><span>站点描述</span></h2>
               <div class="add-article-box-content">
-                <textarea class="form-control" name="site_desc" rows="4"
-                          autocomplete="off"><%=res.getString("site_desc")%></textarea>
+                <textarea class="form-control" name="describe" rows="4" autocomplete="off"></textarea>
                 <span class="prompt-text">描述会出现在网页的description属性中。</span> </div>
             </div>
           </div>
@@ -101,27 +90,20 @@
             <div class="add-article-box">
               <h2 class="add-article-box-title"><span>电子邮件地址</span></h2>
               <div class="add-article-box-content">
-                <input type="email" name="site_email" class="form-control" value="<%=res.getString("site_email")%>"
-                       autocomplete="off" />
+                <input type="email" name="email" class="form-control" placeholder="在此处输入邮箱" autocomplete="off" />
                 <span class="prompt-text">这个电子邮件地址仅为了管理方便而填写</span> </div>
             </div>
             <div class="add-article-box">
               <h2 class="add-article-box-title"><span>ICP备案号</span></h2>
               <div class="add-article-box-content">
-                <input type="text" name="site_icp" class="form-control" value="<%=res.getString("site_icp")%>"
-                       autocomplete="off" />
+                <input type="email" name="email" class="form-control" placeholder="在此处输入备案号" autocomplete="off" />
               </div>
             </div>
             <div class="add-article-box">
-              <h2 class="add-article-box-title"><span>登录超时</span></h2>
-              <div class="add-article-box-content">
-                <input type="text" name="x" class="form-control" placeholder="在此处输入超时时间(s)" value="3600" required
-                       autocomplete="off" />
-                <span class="prompt-text">单位(秒),超时将强制退出</span> </div>
-            </div>
-            <div class="add-article-box">
               <h2 class="add-article-box-title"><span>保存</span></h2>
-              <div class="add-article-box-content"> <span class="prompt-text">请确定您对所有选项所做的更改</span> </div>
+              <div class="add-article-box-content">
+              <span class="prompt-text">请确定您对所有选项所做的更改</span>
+              </div>
               <div class="add-article-box-footer">
                 <button class="btn btn-primary" type="submit" name="submit">更新</button>
               </div>
@@ -130,14 +112,7 @@
         </form>
       </div>
     </div>
-
-    <%
-        break;
-      }
-      DBUtils.closeAll(conn);
-    %>
-
-    </div>
+  </div>
 </section>
 <!--个人信息模态框-->
 <%@ include file="comm/seeUserInfo.jsp"%>

@@ -63,7 +63,7 @@ create table tb_photo(
 # 创建留言表
 create table tb_contact(
     id  int primary key auto_increment,
-    contact_name        varchar (32) not null ,
+    contact_name        varchar (32) not null,
     contact_title       varchar (32) not null,
     contact_email       varchar (64) not null,
     contact_content     varchar (1024) not null,
@@ -71,3 +71,21 @@ create table tb_contact(
 );
 
 
+# 友情链接表
+create table tb_flink(
+    id  int primary key auto_increment,
+    flink_name varchar (32) not null,
+    flink_addr varchar (64) not null,
+    flink_desc varchar (1024) not null
+);
+
+
+# 站点信息表
+create table tb_siteinfo(
+    site_title varchar (32) not null,
+    site_subtitle varchar (32) not null,
+    site_keyword varchar (64) not null,
+    site_desc varchar (1024) not null,
+    site_email varchar (32) not null,
+    site_icp varchar (32) not null
+)
