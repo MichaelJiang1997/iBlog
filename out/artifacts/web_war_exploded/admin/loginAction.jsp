@@ -16,8 +16,14 @@
 <%
     String u_name = request.getParameter("u_name");
     String u_psw = request.getParameter("u_psw");
-    out.write(u_name);
-    out.write(u_psw);
+    String code = request.getParameter("code");
+
+    // 首先验证验证码
+    if(!code.equals(session.getAttribute("code"))){
+        response.sendRedirect("login.jsp?error=2");
+        return;
+    }
+
 
     Connection conn = DBUtils.getConnection();
     String u_last_login;
@@ -77,7 +83,7 @@
         sql = "insert into tb_user_log(u_login_id,u_login_ip,u_login_time,u_login_flag)" +
                 "values ('0','"+request.getRemoteAddr()+"',NOW(),0)";
         s.execute(sql);
-
+        response.sendRedirect("login.jsp?error=1");
 
     } catch (SQLException e) {
         e.printStackTrace();

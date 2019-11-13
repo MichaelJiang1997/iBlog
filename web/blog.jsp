@@ -151,9 +151,6 @@
         }
     %>
 
-    <%
-        for (int i = 0; i < totalPage / 3; i++){
-    %>
     <!--分页-->
     <div class="row post-pagination">
         <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
@@ -211,9 +208,6 @@
         </div>
     </div>
 
-    <%
-        }
-    %>
     <%@ include file="comm/footer.jsp"%>
 </div>
 <!-- 包含脚本-->

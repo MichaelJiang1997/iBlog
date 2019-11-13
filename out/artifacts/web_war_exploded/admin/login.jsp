@@ -1,5 +1,13 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
+<%
+  String error = request.getParameter("error");
+
+%>
+
+<%
+    String path = request.getContextPath() + "/";
+%>
 <!doctype html>
 <html lang="zh-CN">
 <head>
@@ -29,6 +37,8 @@
 <div class="container">
   <div class="siteIcon"><img src="static/images/icon/icon.png" alt="" data-toggle="tooltip" data-placement="top"
                              title="欢迎使用iBlog博客管理系统" draggable="false" /></div>
+  <%=error==null?"":error=="1"?"<button class=\"btn btn-lg btn-danger btn-block\" id=\"error\" >用户名或密码错误</button>":"<button class=\"btn btn-lg btn-danger btn-block\" id=\"error\" >验证码错误</button>"%>
+
   <form action="loginAction.jsp" method="post" autocomplete="off" class="form-signin">
     <h2 class="form-signin-heading">管理员登录</h2>
     <label for="userName" class="sr-only">用户名</label>
@@ -36,6 +46,12 @@
     <label for="password" class="sr-only">密码</label>
     <input type="password" id="password" name="u_psw" class="form-control" placeholder="请输入密码" required
            autocomplete="off" maxlength="18">
+    <label for="code" class="sr-only">验证码</label>
+    <div class="row form-inline">
+        <input type="text" id="code" name="code"  class="form-control" placeholder="验证码" required="" autocomplete="off"
+               maxlength="18" >
+        &nbsp; <img  id="loginYZM" title="点击刷新" src="<%=path%>/CodeServlet" onclick="changeYZM()">
+    </div>
     <button class="btn btn-lg btn-primary btn-block" type="submit" id="submit">登录</button>
   </form>
   <div class="footer">
@@ -60,6 +76,13 @@ $('#signinSubmit').click(function(){
 		$(this).text('请稍后...');
 	}
 });
+
+
+function changeYZM() {
+    var yzm = document.getElementById("loginYZM");
+    yzm.src= "<%=path%>/CodeServlet?num="+Math.random();
+}
+
 </script>
 </body>
 </html>

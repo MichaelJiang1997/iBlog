@@ -76,7 +76,8 @@
                 <th><span class="glyphicon glyphicon-file"></span> <span class="visible-lg">标题</span></th>
                 <th><span class="glyphicon glyphicon-list"></span> <span class="visible-lg">栏目</span></th>
                 <th class="hidden-sm"><span class="glyphicon glyphicon-tag"></span> <span class="visible-lg">标签</span></th>
-                <th class="hidden-sm"><span class="glyphicon glyphicon-comment"></span> <span class="visible-lg">评论</span></th>
+                <th class="hidden-sm"><span class="glyphicon glyphicon-comment"></span> <span class="visible-lg">是否可见
+                </span></th>
                 <th><span class="glyphicon glyphicon-time"></span> <span class="visible-lg">日期</span></th>
                 <th><span class="glyphicon glyphicon-pencil"></span> <span class="visible-lg">操作</span></th>
               </tr>
@@ -133,6 +134,8 @@
             %>
             <%
 
+              // 存一下session吧
+              session.setAttribute("aList",aList);
               for(Article a : aList){
             %>
               <tr>
@@ -140,9 +143,9 @@
                 <td class="article-title"><%=a.getArt_title()%></td>
                 <td><%=a.getArt_class()%></td>
                 <td class="hidden-sm"><%=a.getArt_tag()%></td>
-                <td class="hidden-sm">NULL</td>
+                <td class="hidden-sm"><%=a.getArt_visible().equals("1")?"可见":"隐藏"%></td>
                 <td><%=a.getArt_time()%></td>
-                <td><a href="update-article.html">修改</a> <a rel="6">删除</a></td>
+                <td><a href="updateArticle.jsp?aid=<%=a.getArt_id()%>">修改</a> <a rel="6">删除</a></td>
               </tr>
             <%
               }
@@ -154,9 +157,6 @@
           <nav>
 
             <ul class="pagination pagenav">
-              <%
-                for (int i = 0; i < totalPage / 3; i++){
-              %>
               <!--分页-->
               <div class="row post-pagination">
                 <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
@@ -185,7 +185,7 @@
                   <div class="btn-group" role="group" aria-label="Third group">
 
                     <%
-                      if(Integer.parseInt(pages) * 3  >= totalPage){// 是最后一页则不能往后翻了
+                      if((Integer.parseInt(pages)) * 8  >= totalPage){// 是最后一页则不能往后翻了
 
                     %>
 
@@ -198,9 +198,6 @@
                     <button type="button" class="btn btn-warning"
                     ><a href="article.jsp?pages=<%=String.valueOf(Integer.parseInt(pages)+1)%>">后一页
                     </a></button>
-                    <%
-                      }
-                    %>
 
 
                   </div>
