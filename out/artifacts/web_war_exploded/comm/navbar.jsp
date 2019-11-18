@@ -62,11 +62,6 @@
                     </a>
                 </li>
                 <li>
-                    <a href="works.jsp">
-                        作品
-                    </a>
-                </li>
-                <li>
                     <a href="links.jsp">
                         链接
                     </a>
@@ -74,11 +69,6 @@
                 <li>
                     <a href="contact.jsp">
                         联系
-                    </a>
-                </li>
-                <li>
-                    <a href="help.html">
-                        帮助
                     </a>
                 </li>
                 <li>

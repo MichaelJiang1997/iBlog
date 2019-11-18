@@ -21,66 +21,48 @@
 
 
 <div class="container-fluid main-container" id="main-container">
-    <div class="row top-title">
-        <div class="col-md-12">
-            <h1 class="page-title">
-                友情链接
+    <div class="row">
+        <div class="col-md-12 top-title">
+            <h1 >
+                <div class="row">
+                    友情链接
+                    <div class="input-group ">
+                        <input type="text" class="form-control" placeholder="Search for...">
+                        <span class="input-group-btn">
+                        <button class="btn btn-success" type="button">Go!</button>
+                    </span>
+                    </div>
+                </div>
             </h1>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-12 post-container">
-            <h2 class="post-title">
-                <a href="links.php">
-                    友情链接
-                </a>
-            </h2>
-            <div class="post-content">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="thumbnail">
-                            <img src="img/Link.png" />
-                            <div class="caption">
-                                <h3>
-                                    友情链接
-                                </h3>
-                                <p>
-                                嘿,baby,这里是存放友情链接的地方,你可以在这里存储对您重要的友情链接，然后将其他友情链接存入一个单独的页面．
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <%
-                    // 读取友链表数据
-                    Connection conn = DBUtils.getConnection();
-                    Statement sm = conn.createStatement();
-                    String sql = "select * from tb_flink";
-                    ResultSet res = sm.executeQuery(sql);
-                    while (res.next()){
-                %>
-                    <div class="list-group" id="site-link-list">
-                    <a class="list-group-item" target="_blank"
-                       href="<%=res.getString("flink_addr")%>">
-                        <h4 class="list-group-item-heading">
-                            <i class="fa fa-link">
-                            </i>
-                            <%=res.getString("flink_name")%>
-                        </h4>
-                        <p class="list-group-item-text">
-                            <%=res.getString("flink_desc")%>
-                        </p>
-                    </a>
-                </div>
-                <%
-                    }
-                    DBUtils.closeAll(conn);
-                %>
-            </div>
-            <div class="meta-box">
-            </div>
-        </div>
+
+    <%
+        // 读取友链表数据
+        Connection conn = DBUtils.getConnection();
+        Statement sm = conn.createStatement();
+        String sql = "select * from tb_flink";
+        ResultSet res = sm.executeQuery(sql);
+        while (res.next()){
+    %>
+        <div class="list-group" id="site-link-list">
+        <a class="list-group-item" target="_blank"
+           href="<%=res.getString("flink_addr")%>">
+            <h4 class="list-group-item-heading">
+                <i class="fa fa-link">
+                </i>
+                <%=res.getString("flink_name")%>
+            </h4>
+            <p class="list-group-item-text">
+                <%=res.getString("flink_desc")%>
+            </p>
+        </a>
     </div>
+    <%
+        }
+        DBUtils.closeAll(conn);
+    %>
+</div>
     <div class="row">
         <div class="col-md-4">
         </div>

@@ -1,10 +1,12 @@
+<%-- Created by IntelliJ IDEA. --%>
+
 <%@ page import="java.sql.Connection" %>
 <%@ page import="utils.DBUtils" %>
 <%@ page import="java.sql.Statement" %>
 <%@ page import="java.sql.ResultSet" %>
 <%@ page import="java.util.List" %>
 <%@ page import="Bean.Article" %>
-<%@ page import="java.util.LinkedList" %><%-- Created by IntelliJ IDEA. --%>
+<%@ page import="java.util.LinkedList" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
@@ -109,38 +111,39 @@
             </h2>
             <div class="meta-box">
             <span class="m-post-date">
-              <i class="fa fa-calendar-o">
-              </i>
-              <%=a.getArt_time()%>
+              <i class="fa fa-calendar-o"></i>
             </span>
-
             </div>
-            <div class="post-content">
-                <p>
-                    <%=a.getArt_content().substring(0,10)%>
-                    <a href="">
 
-                    </a>
-                </p>
-            </div>
             <div class="meta-box">
+
             <span class="cat-links">
+              <i class="fa fa-navicon">
+              </i>
+              <b>
+                  时间:
+              </b>
+              <a href="#">
+                   <%=a.getArt_time()%>
+              </a>
+            </span>
+                <span class="cat-links">
               <i class="fa fa-navicon">
               </i>
               <b>
                   分类:
               </b>
-              <a href="topics/life/diary.htm">
+              <a href="#">
                   <%=a.getArt_class()%>
               </a>
             </span>
-            <span class="tag-links">
+                <span class="tag-links">
               <i class="fa fa-tags">
               </i>
               <b>
                   标签:
               </b>
-              <a href="tags/毕业.htm" rel="tag">
+              <a href="#" rel="tag">
                   <%=a.getArt_tag()%>
               </a>
             </span>

@@ -1,4 +1,6 @@
-<%-- Created by IntelliJ IDEA. --%>
+<%@ page import="Bean.Article" %>
+<%@ page import="java.util.List" %>
+<%@ page import="java.util.LinkedList" %><%-- Created by IntelliJ IDEA. --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <!DOCTYPE html>
@@ -34,109 +36,108 @@
             </div>
         </div>
     <!--main Start-->
-    <div class="row">
-        <div class="col-md-12 post-container">
-            <h2 class="post-title">
-                <a href="content.jsp" title="">异步测试文章</a>
-            </h2>
-            <div class="meta-box">
+        <%
+            List<Article> aList = new LinkedList<>();
+
+            // 建立数据库连接
+            Connection conn = DBUtils.getConnection();
+            Statement sm = conn.createStatement();
+
+            // 统计文章总数做分页
+            int totalPage = 0;
+            String sqlCont = "select count(*) as cnt from tb_article";
+            ResultSet conRes = sm.executeQuery(sqlCont);
+            while (conRes.next()){
+                totalPage = conRes.getInt("cnt");
+            }
+
+            // 数据库拿文章
+            String sql = "select * from tb_article order by art_time desc limit 3";
+            ResultSet res = sm.executeQuery(sql);
+            while (res.next()){
+                aList.add(new Article(res.getString("art_id"),res.getString("art_title"),
+                        res.getString("art_class"),res.getString("art_tag"),res.getString("art_content"),
+                        res.getString("art_time"),res.getString("art_count"),res.getString("art_visible")));
+            }
+
+            // 拿标签和归类名哎
+            for(Article a: aList){
+                String sqlClass = "select class_name from tb_art_class where class_id="+a.getArt_class();
+                ResultSet classRes = sm.executeQuery(sqlClass);
+                String className="";
+                while(classRes.next()) {
+                    className = classRes.getString("class_name");
+                }
+                a.setArt_class(className);
+
+                String sqlTag = "select tag_name from tb_art_tag where tag_id="+a.getArt_tag();
+                ResultSet tagRes = sm.executeQuery(sqlTag);
+                String tagName="";
+                while(tagRes.next()) {
+                    tagName = tagRes.getString("tag_name");
+                }
+                a.setArt_tag(tagName);
+            }
+
+
+            DBUtils.closeAll(conn);
+        %>
+
+        <%
+            for(Article a : aList){
+
+        %>
+        <div class="row">
+            <div class="col-md-12 post-container">
+                <h2 class="post-title">
+                    <a href="content.jsp?aid=<%=a.getArt_id() %>" title=""><%=a.getArt_title()%></a>
+                </h2>
+                <div class="meta-box">
             <span class="m-post-date">
               <i class="fa fa-calendar-o">
               </i>
-              2015年6月3日
             </span>
-            <span class="comments-link">
-              <a href="" class="ds-thread-count" data-thread-key="9500" title="Comment on 毕业两周年">
-                  <i class="fa fa-comments-o">
-                  </i>
-                  留言
-              </a>
-            </span>
-            </div>
-            <div class="post-content">
-                <p>
-                    如果您在使用中遇到什么麻烦的事情,那么baby千万不要捶胸顿足,在友情链接界面您会看到作者的博客链接，您可以通过访问作者的博客留言联系我
-                    <a href="http://www.ybsat.com">
-                        联系我
-                    </a>
-                    </p>
-            </div>
-            <div class="meta-box">
+
+                </div>
+
+                <div class="meta-box">
+
             <span class="cat-links">
               <i class="fa fa-navicon">
               </i>
               <b>
-                  分类:
+                  时间:
               </b>
-              <a href="topics/life/diary.htm">
-                  测试
+              <a href="#">
+                   <%=a.getArt_time()%>
               </a>
             </span>
-            <span class="tag-links">
+            <span class="cat-links">
+              <i class="fa fa-navicon">
+              </i>
+              <b >
+                  分类:
+              </b>
+              <a href="#">
+                  <%=a.getArt_class()%>
+              </a>
+            </span>
+                    <span class="tag-links">
               <i class="fa fa-tags">
               </i>
               <b>
                   标签:
               </b>
-              <a href="tags/毕业.htm" rel="tag">
-                  异步
+              <a href="#" rel="tag">
+                  <%=a.getArt_tag()%>
               </a>
             </span>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12 post-container">
-            <h2 class="post-title">
-                <a href="content.jsp" title="">异步测试文章</a>
-            </h2>
-            <div class="meta-box">
-            <span class="m-post-date">
-              <i class="fa fa-calendar-o">
-              </i>
-              2015年6月3日
-            </span>
-            <span class="comments-link">
-              <a href="" class="ds-thread-count" data-thread-key="9500" title="Comment on 毕业两周年">
-                  <i class="fa fa-comments-o">
-                  </i>
-                  留言
-              </a>
-            </span>
-            </div>
-            <div class="post-content">
-                <p>
-                    leaves轻博客主要是将大家在博客中不需要的一些东西直接切割掉,只保存最实用的东西,这样使leaves变得更加简洁,同时更显得大方,由于leaves基于bootstrap所以说如果您想定制一些需要的东西是很好改动的．
-                    <a href="">
-                        这是一个链接
-                    </a>
-                    如果您觉得本博客的内容不够您的使用,您可以咨询作者,作者是很乐意为广大用户奉献代码的！
-                </p>
-            </div>
-            <div class="meta-box">
-            <span class="cat-links">
-              <i class="fa fa-navicon">
-              </i>
-              <b>
-                  分类:
-              </b>
-              <a href="topics/life/diary.html">
-                  测试
-              </a>
-            </span>
-            <span class="tag-links">
-              <i class="fa fa-tags">
-              </i>
-              <b>
-                  标签:
-              </b>
-              <a href="tags/毕业.html" rel="tag">
-                  异步
-              </a>
-            </span>
-            </div>
-        </div>
-    </div>
+        <%
+            }
+        %>
     <!--更多内容-->
     <div class="row">
         <div class="col-md-12">
