@@ -50,21 +50,52 @@
       <jsp:param value="index" name="now"/>
     </jsp:include>
 
+    <%
+      String articleSum="", commentSum="", linkSum="", clickSum="";
+
+      // 拿信息总览的一些数据
+      Connection conn = DBUtils.getConnection();
+      Statement sm = conn.createStatement();
+      String sql = "select count(*) as article_sum from tb_article";
+      ResultSet res = sm.executeQuery(sql);
+      while (res.next()){
+          articleSum = res.getString("article_sum");
+      }
+
+      sql = "select count(*) as comment_sum from tb_contact";
+      res = sm.executeQuery(sql);
+      while (res.next()){
+        commentSum = res.getString("comment_sum");
+      }
+
+      sql = "select count(*) as link_sum from tb_flink";
+      res = sm.executeQuery(sql);
+      while (res.next()){
+        linkSum = res.getString("link_sum");
+      }
+
+      sql = "select sum(art_count) as click_sum from tb_article";
+      res = sm.executeQuery(sql);
+      while (res.next()){
+        clickSum = res.getString("click_sum");
+      }
+
+    %>
     <div class="col-sm-9 col-sm-offset-3 col-md-10 col-lg-10 col-md-offset-2 main" id="main">
       <h1 class="page-header">信息总览</h1>
       <div class="row placeholders">
         <div class="col-xs-6 col-sm-3 placeholder">
           <h4>文章</h4>
-          <span class="text-muted">0 条</span> </div>
+          <span class="text-muted"><%=articleSum%> 条</span> </div>
         <div class="col-xs-6 col-sm-3 placeholder">
           <h4>评论</h4>
-          <span class="text-muted">0 条</span> </div>
+          <span class="text-muted"><%=commentSum%> 条</span> </div>
         <div class="col-xs-6 col-sm-3 placeholder">
           <h4>友链</h4>
-          <span class="text-muted">0 条</span> </div>
+          <span class="text-muted"><%=linkSum%> 条</span> </div>
         <div class="col-xs-6 col-sm-3 placeholder">
           <h4>访问量</h4>
-          <span class="text-muted">0</span> </div>
+          <span class="text-muted"><%=clickSum%> 次</span> </div>
       </div>
       <h1 class="page-header">状态</h1>
       <div class="table-responsive">
